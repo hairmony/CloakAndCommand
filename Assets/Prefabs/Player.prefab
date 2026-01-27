@@ -29,7 +29,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 429311956669006329}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -5.5599995, y: -0.49000013, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -146,7 +146,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -171,25 +171,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   moveForce: 6
-  jumpForce: 6.5
   moveX: 0
+  moveY: 0
   isGrounded: 1
   canMove: 1
-  canDoubleJump: 0
-  extraJumps: 1
   canTimeSlow: 0
   slowDuration: 2
   slowFactor: 0.5
   slowFactorPlayer: 1
   isSlowing: 0
-  canRoll: 0
+  canRoll: 1
   rollForce: 8
   rollDuration: 0.5
   rollCooldown: 0.5
   isRolling: 0
   rollCooldownTimer: 0.4
-  rollColliderSize: {x: 0.5, y: 0.75}
-  rollColliderOffset: {x: 0, y: 0.45}
+  rollColliderSize: {x: 0, y: 0.75}
+  rollColliderOffset: {x: 0, y: 0.5}
 --- !u!114 &346362002089062539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -203,6 +201,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerControls
   horizontalAxis: Horizontal
+  verticalAxis: Vertical
   jumpButton: Jump
   fire1Button: Fire1
   fire2Button: Fire2
@@ -210,6 +209,7 @@ MonoBehaviour:
   rollButton: Fire2
   interactButton: Interact
   horizontalInput: 0
+  verticalInput: 0
   jumpPressed: 0
   fire1Pressed: 0
   fire2Pressed: 0

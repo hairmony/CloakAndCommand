@@ -11,18 +11,12 @@ public class PlayerMovement : MonoBehaviour
     [Header("Basic Movement")]
     [SerializeField]
     private float moveForce = 6f;
-    [SerializeField]
-    private float jumpForce = 6f;
 
     public float moveX;
+    public float moveY;
     public bool isGrounded = true;
     public bool canMove = true;
-
-    [Header("Double Jump")]
-    public bool canDoubleJump = false;
-    [SerializeField]
-    private int extraJumps = 1;
-    private int jumpsLeft;
+    private Vector2 lastMoveDirection = Vector2.right; // Default to right
 
     [Header("Time Slow")]
     public bool canTimeSlow = false;
@@ -31,21 +25,21 @@ public class PlayerMovement : MonoBehaviour
     public float slowFactorPlayer = 1f;
     public bool isSlowing = false;
     private float slowTimer = 0f;
-    private float normalGravity;
 
     [Header("Roll")]
     public bool canRoll = true;
-    public float rollForce = 8f;
-    public float rollDuration = 0.5f;
-    private float rollTimer = 0.5f;
+    public float rollForce = 15f;
+    public float rollDuration = 0.25f;
+    private float rollTimer = 0.3f;
     public float rollCooldown = 0.5f;
     public bool isRolling = false;
     public float rollCooldownTimer = 0.4f;
     private CapsuleCollider2D collider;
     private Vector2 normalColliderSize;
     private Vector2 normalColliderOffset;
-    public Vector2 rollColliderSize = new Vector2(0.5f, 0.75f);
-    public Vector2 rollColliderOffset = new Vector2(0f, 0.45f);
+    public Vector2 rollColliderSize = new Vector2(0f, 0f);
+    public Vector2 rollColliderOffset = new Vector2(0f, 0f);
+    private Vector2 rollDirection;
 
     private void Awake()
     {
@@ -55,21 +49,22 @@ public class PlayerMovement : MonoBehaviour
         collider = GetComponent<CapsuleCollider2D>();
         normalColliderSize = collider.size;
         normalColliderOffset = collider.offset;
+
+        myBody.gravityScale = 0f;
     }
 
     void Start()
     {
-        jumpsLeft = extraJumps;
-        normalGravity = myBody.gravityScale;
+
     }
 
     void Update()
     {
-        PlayerJump();
-        if (canMove)
-        {
+        if (canMove && !isRolling)
             PlayerMoveKeyboard();
-        }
+
+        if (moveX != 0 && !isRolling) 
+            sr.flipX = moveX < 0;
 
         // TIME SLOW
         if (canTimeSlow && !isSlowing && controls.fire3Pressed)
@@ -108,8 +103,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isRolling)
         {
-            float direction = sr.flipX ? -1f : 1f;
-            myBody.linearVelocity = new Vector2(direction * rollForce, myBody.linearVelocity.y);
+            myBody.linearVelocity = rollDirection * rollForce;
         }
     }
 
@@ -118,36 +112,19 @@ public class PlayerMovement : MonoBehaviour
         if (isRolling) return;
 
         moveX = controls.horizontalInput;
+        moveY = Input.GetAxisRaw("Vertical");
+        Vector2 moveDirection = new Vector2(moveX, moveY).normalized;
 
-        float horizontalVelocity = moveForce * moveX;
-        if (isSlowing)
-            horizontalVelocity *= slowFactorPlayer;
-        myBody.linearVelocity = new Vector2(horizontalVelocity, myBody.linearVelocity.y);
-    }
-
-    void PlayerJump()
-    {
-        if (controls.jumpPressed)
+        if (moveDirection != Vector2.zero)
         {
-            if (isGrounded)
-            {
-                Jump();
-                isGrounded = false;
-            }
-            else if (jumpsLeft > 0)
-            {
-                Jump();
-                jumpsLeft--;
-            }
+            lastMoveDirection = moveDirection;
         }
-    }
 
-    void Jump()
-    {
-        myBody.linearVelocity = new Vector2(myBody.linearVelocity.x, 0f);
+        float velocity = moveForce;
 
-        float currentJumpForce = isSlowing ? jumpForce * slowFactorPlayer : jumpForce;
-        myBody.AddForce(currentJumpForce * Vector2.up, ForceMode2D.Impulse);
+        if (isSlowing)
+            velocity *= slowFactorPlayer;
+        myBody.linearVelocity = moveDirection * velocity;
     }
 
     void StartTimeSlow()
@@ -155,7 +132,6 @@ public class PlayerMovement : MonoBehaviour
         isSlowing = true;
         slowTimer = slowDuration;
         moveForce /= (slowFactorPlayer);
-        jumpForce /= (slowFactorPlayer);
         //myBody.gravityScale /= (slowFactorPlayer);
 
         Time.timeScale = slowFactor;
@@ -166,7 +142,6 @@ public class PlayerMovement : MonoBehaviour
     {
         isSlowing = false;
         moveForce *= (slowFactorPlayer);
-        jumpForce *= (slowFactorPlayer);
 
         Time.timeScale = 1f;
         Time.fixedDeltaTime = 0.02f;
@@ -179,6 +154,16 @@ public class PlayerMovement : MonoBehaviour
         isRolling = true;
         rollTimer = rollDuration;
         rollCooldownTimer = rollCooldown;
+
+        float h = controls.horizontalInput;
+        float v = Input.GetAxisRaw("Vertical");
+        rollDirection = new Vector2(h, v).normalized;
+
+        // Rolling while not moving
+        if (rollDirection == Vector2.zero)
+        {
+            rollDirection = lastMoveDirection;
+        }
 
         collider.size = rollColliderSize;
         collider.offset = rollColliderOffset;
@@ -193,23 +178,24 @@ public class PlayerMovement : MonoBehaviour
         collider.size = normalColliderSize;
         collider.offset = normalColliderOffset;
 
-        myBody.linearVelocity = new Vector2(0f, myBody.linearVelocity.y);
+        //myBody.linearVelocity = new Vector2(0f, myBody.linearVelocity.y);
+        myBody.linearVelocity = Vector2.zero;
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = true;
-            jumpsLeft = canDoubleJump ? extraJumps : 0;
-        }
-    }
+    //private void OnCollisionEnter2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.CompareTag("Ground"))
+    //    {
+    //        isGrounded = true;
+    //        jumpsLeft = canDoubleJump ? extraJumps : 0;
+    //    }
+    //}
 
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (collision.gameObject.CompareTag("Ground"))
-        {
-            isGrounded = false;
-        }
-    }
+    //private void OnCollisionExit2D(Collision2D collision)
+    //{
+    //    if (collision.gameObject.CompareTag("Ground"))
+    //    {
+    //        isGrounded = false;
+    //    }
+    //}
 }

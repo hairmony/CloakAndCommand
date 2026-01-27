@@ -1032,6 +1032,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 7377333190275907805, guid: 09ddd70800f02ff4e8b8687b1be7e3af, type: 3}
+      propertyPath: m_GravityScale
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7763587112786788088, guid: 09ddd70800f02ff4e8b8687b1be7e3af, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.44
@@ -1152,7 +1156,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4967942319676234795, guid: 17ce79a842126e44198dad739da81e08, type: 3}
       propertyPath: orthographic size
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5493231995810500690, guid: 17ce79a842126e44198dad739da81e08, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1162,9 +1166,25 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5493231995810500690, guid: 17ce79a842126e44198dad739da81e08, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5919122576112595529, guid: 17ce79a842126e44198dad739da81e08, type: 3}
+      propertyPath: Composition.DeadZone.Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5919122576112595529, guid: 17ce79a842126e44198dad739da81e08, type: 3}
+      propertyPath: Composition.ScreenPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5919122576112595529, guid: 17ce79a842126e44198dad739da81e08, type: 3}
+      propertyPath: Composition.HardLimits.Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6685502845871395603, guid: 17ce79a842126e44198dad739da81e08, type: 3}
       propertyPath: Lens.OrthographicSize
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6685502845871395603, guid: 17ce79a842126e44198dad739da81e08, type: 3}
       propertyPath: Target.TrackingTarget
@@ -1172,11 +1192,11 @@ PrefabInstance:
       objectReference: {fileID: 596652812}
     - target: {fileID: 7424127129511459796, guid: 17ce79a842126e44198dad739da81e08, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -7.44
+      value: -7.4400005
       objectReference: {fileID: 0}
     - target: {fileID: 7424127129511459796, guid: 17ce79a842126e44198dad739da81e08, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.5200005
+      value: -4.32
       objectReference: {fileID: 0}
     - target: {fileID: 7424127129511459796, guid: 17ce79a842126e44198dad739da81e08, type: 3}
       propertyPath: m_LocalPosition.z
