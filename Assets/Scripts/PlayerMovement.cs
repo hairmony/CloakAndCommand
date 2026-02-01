@@ -18,6 +18,9 @@ public class PlayerMovement : MonoBehaviour
     public bool canMove = true;
     private Vector2 lastMoveDirection = Vector2.right; // Default to right
 
+    [Header("Relative Movement")]
+    [SerializeField] private float rotationSpeed = 10f; // Degrees per second
+
     [Header("Time Slow")]
     public bool canTimeSlow = false;
     public float slowDuration = 2f;
@@ -65,6 +68,8 @@ public class PlayerMovement : MonoBehaviour
 
         if (moveX != 0 && !isRolling) 
             sr.flipX = moveX < 0;
+
+        ApplyRotation();
 
         // TIME SLOW
         if (canTimeSlow && !isSlowing && controls.fire3Pressed)
@@ -127,6 +132,44 @@ public class PlayerMovement : MonoBehaviour
         myBody.linearVelocity = moveDirection * velocity;
     }
 
+    //void PlayerMoveKeyboard()
+    //{
+    //    if (isRolling) return;
+
+    //    // 1. Get Inputs
+    //    moveX = controls.horizontalInput; // A/D keys
+    //    moveY = Input.GetAxisRaw("Vertical"); // W/S keys
+
+    //    // 2. Handle Rotation (A/D)
+    //    // We subtract moveX because positive D usually means clockwise rotation
+    //    float rotationAmount = -moveX * rotationSpeed * Time.unscaledDeltaTime;
+    //    transform.Rotate(0, 0, rotationAmount);
+
+    //    // 3. Handle Forward/Backward Movement (W/S)
+    //    // Most Unity sprites face 'Right' by default. If yours faces 'Up', use transform.up
+    //    Vector2 forwardDirection = transform.right;
+
+    //    float velocity = moveForce;
+    //    if (isSlowing) velocity *= slowFactorPlayer;
+
+    //    // Move along the sprite's current facing direction
+    //    myBody.linearVelocity = forwardDirection * (moveY * velocity);
+    //}
+
+    void ApplyRotation()
+    {
+        if (moveX != 0 || moveY != 0)
+        {
+            // Where player WANTs to look
+            float targetAngle = Mathf.Atan2(moveY, moveX) * Mathf.Rad2Deg;
+            // Where player's currently looking
+            float currentAngle = transform.eulerAngles.z;
+
+            float smoothAngle = Mathf.LerpAngle(currentAngle, targetAngle, rotationSpeed * Time.unscaledDeltaTime);
+            transform.rotation = Quaternion.Euler(0, 0, smoothAngle);
+        }
+    }
+
     void StartTimeSlow()
     {
         isSlowing = true;
@@ -169,6 +212,27 @@ public class PlayerMovement : MonoBehaviour
         collider.offset = rollColliderOffset;
         canMove = false;
     }
+
+    //void StartRoll()
+    //{
+    //    isRolling = true;
+    //    rollTimer = rollDuration;
+    //    rollCooldownTimer = rollCooldown;
+
+    //    // Get the current vertical input to see if rolling forward or backward
+    //    float v = Input.GetAxisRaw("Vertical");
+
+    //    // Determine roll direction based on sprite's facing
+    //    // Again, use transform.up if your sprite's 'front' is the top
+    //    Vector2 facingDir = transform.right;
+
+    //    // Roll backward if holding S, otherwise roll forward
+    //    rollDirection = (v < 0) ? -facingDir : facingDir;
+
+    //    collider.size = rollColliderSize;
+    //    collider.offset = rollColliderOffset;
+    //    canMove = false;
+    //}
 
     void EndRoll()
     {
