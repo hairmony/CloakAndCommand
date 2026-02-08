@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.18725, y: -0.88072, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.8, y: 0.8, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -128,8 +128,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.21133333}
-  m_Size: {x: 1, y: 1}
+  m_Offset: {x: 0, y: 0}
+  m_Size: {x: 0.8, y: 0.8}
   m_Direction: 0
 --- !u!50 &784061479026206539
 Rigidbody2D:
@@ -146,7 +146,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -170,8 +170,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ad352f5442d9d9844a1f66e85af7407d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::EPathing
-  targets:
-  - {fileID: 8552305701688446772, guid: 9d38fb7d72cfb0e41a1adc9dbcfd1b36, type: 3}
-  - {fileID: 429311956669006329, guid: 09ddd70800f02ff4e8b8687b1be7e3af, type: 3}
-  speed: 10
-  playerDetectRange: 4
+  health: 10
+  speed: 5
+  reachDistance: 0.1
+  togglePathDist: 0
+  functionDelaySeconds: 1
